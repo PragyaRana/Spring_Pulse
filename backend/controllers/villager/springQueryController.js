@@ -16,31 +16,35 @@ exports.getMySprings = async (req, res) => {
     }
 };
 
+
 //used to get spring details
 exports.getSpringDetail = async (req,res) => {
     
     try {
-        const spring = await spring.findbyId(req.params.id);
 
-        if(!spring) {
+        const springData = await spring.findById(req.params.id);
+
+        if(!springData) {
             return res.status(404).json({ message: "Spring not found"});
         }
+        const history = await SpringData.find({ springId: req.params.id }).sort({ date: -1 });
 
-        const history = await SpringData.find({ springId }).sort({ date: -1 });
-
-        res.json({ spring, history });
+        res.json({ spring: springData, history });
 
     } catch (error) {
+
         res.status(500).json({ error: error.message });
+
     }
 };
+
 
 //used to get spring history
 exports.getSpringHistory = async (req, res) => {
     try{
-        const springId = req.params.id;
+        const springId = req.params.springId;
 
-        const history = await SpringData.findById({ springId }).sort({ date: -1 });
+        const history = await SpringData.find({ springId }).sort({ date: -1 });
 
         res.json(history);
 
