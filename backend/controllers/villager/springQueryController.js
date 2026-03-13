@@ -4,16 +4,22 @@ const SpringData = require("../../models/villager/SpringData");
 //used to get all the springs
 exports.getMySprings = async (req, res) => {
 
-    try{
-        const springs = await spring.find({ createdBy: req.user.id });
-        if(!springs){
-            return res.status(404).json({ message: "No springs found" });
-        }
-        res.json(springs);
+  try {
 
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const springs = await spring.find({ createdBy: req.user.id });
+
+    if (springs.length === 0) {
+      return res.status(404).json({ message: "No springs found" });
     }
+
+    res.json(springs);
+
+  } catch (error) {
+
+    res.status(500).json({ error: error.message });
+
+  }
+
 };
 
 
@@ -52,3 +58,68 @@ exports.getSpringHistory = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+// used to update spring
+exports.updateSpring = async (req, res) => {
+
+  try {
+
+    const springId = req.params.id
+
+    const springData = await spring.findById(springId)
+
+    if (!springData) {
+      return res.status(404).json({ message: "Spring not found" })
+    }
+
+    // check owner
+    if (springData.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" })
+    }
+
+    const updatedSpring = await spring.findByIdAndUpdate(
+      springId,
+      req.body,
+      { new: true }
+    )
+
+    res.json(updatedSpring)
+
+  } catch (error) {
+
+    res.status(500).json({ error: error.message })
+
+  }
+
+}
+
+
+// used to delete spring
+exports.deleteSpring = async (req, res) => {
+
+  try {
+
+    const springId = req.params.id
+
+    const springData = await spring.findById(springId)
+
+    if (!springData) {
+      return res.status(404).json({ message: "Spring not found" })
+    }
+
+    if (springData.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" })
+    }
+
+    await spring.findByIdAndDelete(springId)
+
+    res.json({ message: "Spring deleted successfully" })
+
+  } catch (error) {
+
+    res.status(500).json({ error: error.message })
+
+  }
+
+}
