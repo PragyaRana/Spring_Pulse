@@ -113,7 +113,7 @@ function Landing() {
             across Himalayan villages. Real-time intelligence for sustainable conservation.
           </p>
 
-          {/* <div className="flex justify-center gap-4 mb-16 flex-wrap">
+          <div className="flex justify-center gap-4 mb-16 flex-wrap">
             <Link
               to="/login"
               className="group bg-gradient-to-r from-[#2E9F8F] to-[#58C4B4] text-white px-8 py-3.5 rounded-full font-medium hover:shadow-xl hover:shadow-[#2E9F8F]/30 transform hover:-translate-y-0.5 transition-all duration-300"
@@ -132,7 +132,7 @@ function Landing() {
             >
               Register Spring
             </Link>
-          </div> */}
+          </div>
         </div>
 
         {/* HERO IMAGE - Enhanced with floating animation */}
